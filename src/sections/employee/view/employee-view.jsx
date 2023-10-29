@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import axios from 'axios'; 
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
@@ -16,12 +16,13 @@ import Dialog from '@mui/material/Dialog'; // Import Dialog component
 import DialogTitle from '@mui/material/DialogTitle'; // Import DialogTitle component
 import DialogActions from '@mui/material/DialogActions'; // Import DialogActions component
 import TextField from '@mui/material/TextField'; //
-import Box from '@mui/material/Box'
 
 import { users } from 'src/_mock/user';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+
+import Box from '@mui/material/Box'
 
 import TableNoData from '../table-no-data';
 import UserTableRow from '../user-table-row';
@@ -30,9 +31,10 @@ import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
+
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function EmployeePage() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -48,9 +50,6 @@ export default function UserPage() {
   const [data, setData] = useState([]);
 
   const [openModal, setOpenModal] = useState(false);
-  const [name, setName] = useState(''); 
-  const [location, setLocation] = useState(''); 
-  const [field, setField] = useState('');
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -103,18 +102,18 @@ export default function UserPage() {
 
   useEffect(() => {
     // Fetch data from the API when the component mounts
-    axios.get('http://localhost:8030/company/getall')
+    axios.get('http://localhost:8030/company/getAllEmployees')
       .then((response) => {
         // Map the API response data to the format expected by the table
         const mappedData = response.data.map((item, index) => ({
-          name: item.Name.value,
-          location: item.Location.value,
+          name: item.EmployeeName.value,
+          company: item.CompanyName.value,
           field: item.Field.value,
           isVerified: 'Yes',
           status: 'Active', 
           id: index,
         }));
-        console.log(mappedData)
+        console.log(response)
         setData(mappedData);
       })
       .catch((error) => {
@@ -139,65 +138,39 @@ export default function UserPage() {
     setOpenModal(false);
   };
 
-  const handleAddCompany = () => {
-    const newCompany = {
-      name,
-      location,
-      field,
-    };
-
-    // Make a POST request to add the new company
-    axios.post('http://localhost:8030/company/addCompany', newCompany)
-      .then((response) => {
-        // Handle success, e.g., show a success message
-        console.log('Company added successfully', response);
-        // Close the modal
-        handleCloseModal();
-        window.location.reload();
-
-      })
-      .catch((error) => {
-        // Handle error, e.g., show an error message
-        console.error('Error adding company:', error);
-      });
-  };
-
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Companies</Typography>
+        <Typography variant="h4">Employees</Typography>
 
         <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleOpenModal}>
-          New Company
+          New Employee
         </Button>
       </Stack>
-
       <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="sm">
-        <DialogTitle>Add New Company</DialogTitle>
+        <DialogTitle>Add New Employee</DialogTitle>
         <Box marginBottom={2}>
           <TextField
-            label="Name"
+            label="Employee Name"
             variant="outlined"
             fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}           />
-        </Box>
-        <Box marginBottom={2}>
-          <TextField
-            label="Location"
-            variant="outlined"
-            fullWidth
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            // Add state and change handlers for input fields as needed
           />
         </Box>
         <Box marginBottom={2}>
           <TextField
-            label="Field"
+            label="Employee Field"
             variant="outlined"
             fullWidth
-            value={field}
-            onChange={(e) => setField(e.target.value)}
+            // Add state and change handlers for input fields as needed
+          />
+        </Box>
+        <Box marginBottom={2}>
+          <TextField
+            label="Employee Company"
+            variant="outlined"
+            fullWidth
+            // Add state and change handlers for input fields as needed
           />
         </Box>
         {/* Add more input fields as needed */}
@@ -206,7 +179,7 @@ export default function UserPage() {
             Cancel
           </Button>
           <Button
-            onClick={handleAddCompany}
+            // Add an event handler to handle form submission
             color="primary"
           >
             Add
@@ -232,8 +205,8 @@ export default function UserPage() {
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
                   { id: 'name', label: 'Name' },
-                  { id: 'location', label: 'Location' },
                   { id: 'field', label: 'Field' },
+                  { id: 'company', label: 'Company' },
                   { id: 'isVerified', label: 'Verified', align: 'center' },
                   { id: 'status', label: 'Status' },
                   { id: '' },
@@ -246,10 +219,9 @@ export default function UserPage() {
                     <UserTableRow
                       key={row.name}
                       name={row.name}
-                      location={row.location}
-                      status={row.status}
                       field={row.field}
-                      avatarUrl={row.avatarUrl}
+                      status={row.status}
+                      company={row.company}
                       isVerified={row.isVerified}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
