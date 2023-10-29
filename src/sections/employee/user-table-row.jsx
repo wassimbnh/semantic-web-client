@@ -19,7 +19,7 @@ export default function UserTableRow({
   selected,
   name,
   avatarUrl,
-  location,
+  company,
   field,
   isVerified,
   status,
@@ -48,9 +48,9 @@ export default function UserTableRow({
           </Stack>
         </TableCell>
 
-        <TableCell>{location}</TableCell>
-
         <TableCell>{field}</TableCell>
+
+        <TableCell>{company}</TableCell>
 
         <TableCell align="center">{isVerified ? 'Yes' : 'No'}</TableCell>
 
@@ -92,7 +92,7 @@ export default function UserTableRow({
 UserTableRow.propTypes = {
   avatarUrl: PropTypes.any,
   field: PropTypes.any,
-  location: PropTypes.any,
+  company: PropTypes.any,
   isVerified: PropTypes.any,
   name: PropTypes.any,
   selected: PropTypes.any,
