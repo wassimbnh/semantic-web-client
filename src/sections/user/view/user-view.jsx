@@ -114,7 +114,6 @@ export default function UserPage() {
           status: 'Active', 
           id: index,
         }));
-        console.log(mappedData)
         setData(mappedData);
       })
       .catch((error) => {
@@ -161,6 +160,9 @@ export default function UserPage() {
         console.error('Error adding company:', error);
       });
   };
+
+  
+  
 
   return (
     <Container>
@@ -234,7 +236,7 @@ export default function UserPage() {
                   { id: 'name', label: 'Name' },
                   { id: 'location', label: 'Location' },
                   { id: 'field', label: 'Field' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
+                  { id: 'employees', label: 'Employees', align: 'center' },
                   { id: 'status', label: 'Status' },
                   { id: '' },
                 ]}
@@ -250,7 +252,7 @@ export default function UserPage() {
                       status={row.status}
                       field={row.field}
                       avatarUrl={row.avatarUrl}
-                      isVerified={row.isVerified}
+                      employees={row.employees}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
                     />
